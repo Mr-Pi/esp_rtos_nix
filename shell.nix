@@ -12,12 +12,16 @@ stdenv.mkDerivation {
       future
       cryptography
       pyparsing
+      setuptools
+      click
+      pyelftools
     ]))
     cacert
     flex
     bison
     gperf
     ncurses
+    pkgconfig
   ];
   buildInputs = [
   ];
@@ -29,5 +33,6 @@ stdenv.mkDerivation {
     export PATH="$PWD/xtensa-lx106-elf/bin:$PATH"
     export IDF_PATH="''${PWD}/ESP8266_RTOS_SDK"
     cd "$IDF_PATH"
+    cd examples/get-started/hello_world
   '';
 }
