@@ -7,6 +7,15 @@ stdenv.mkDerivation {
     wget
     gnutar
     findutils
+    (python2.withPackages(ps: with ps; [
+      pyserial
+      future
+      cryptography
+      pyparsing
+      setuptools
+      click
+      pyelftools
+    ]))
     (python3.withPackages(ps: with ps; [
       pyserial
       future
