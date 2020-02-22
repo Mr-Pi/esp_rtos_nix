@@ -9,12 +9,11 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "esp8266-toolchain";
-  version = "5.2.0";
+  pname = "esp8266-toolchain";
+  version = (import ./toolchain-version.nix).version;
 
   src = fetchurl {
-    url = "https://dl.espressif.com/dl/xtensa-lx106-elf-linux64-1.22.0-100-ge567ec7-5.2.0.tar.gz";
-    sha256 = "1574p170cpd46pz5mpi22jsfqrj5bd7xys1gj5fzihjr6y2h4skh";
+    inherit (import ./toolchain-version.nix) url sha256;
   };
 
   buildInputs = [ makeWrapper ];

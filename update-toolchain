@@ -1,0 +1,20 @@
+#!/usr/bin/env nix-shell
+#!nix-shell -i bash -p curl -p gnused -p gnugrep
+#vi: ft=bash
+
+set -euo pipefail
+
+latest_toolchain_url="$(curl -s https://raw.githubusercontent.com/espressif/ESP8266_RTOS_SDK/master/README.md | grep "https://dl.espressif.com/dl/xtensa-lx106-elf-${TOOLCHAIN_VERSION:=linux64}" | head -n 1 | sed 's/.*\(http[s]*:\/\/[-./%@0-9A-Za-z]\+\).*/\1/g')"
+current_toolchain_url="$(nix eval --raw '(import ./toolchain-version.nix).url' || :)"
+
+if [[ "$latest_toolchain_url" != "$current_toolchain_url" ]]; then
+	sha256="$(nix-prefetch-url "$latest_toolchain_url")"
+	version="$(echo "$latest_toolchain_url" | grep -Po '[^-][\d\.]*(?=\.tar\.gz)')"
+	{
+		echo '{'
+		echo "  url = \"${latest_toolchain_url}\";"
+		echo "  sha256 = \"${sha256}\";"
+		echo "  version = \"${version}\";"
+		echo '}'
+	} > ./toolchain-version.nix
+fi
