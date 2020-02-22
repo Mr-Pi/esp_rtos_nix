@@ -16,10 +16,14 @@ stdenv.mkDerivation {
   ];
 
   shellHook = ''
-    ./install_rtos.sh
-
     export IDF_PATH="''${PWD}/ESP8266_RTOS_SDK"
-    cd "$IDF_PATH"
-    cd examples/get-started/hello_world
+
+    if ! [[ -d "$IDF_PATH" ]]; then
+      git clone https://github.com/espressif/ESP8266_RTOS_SDK
+    fi
+    git -C "$IDF_PATH" pull
+
+    mkdir -pv projects
+    cd projects
   '';
 }
